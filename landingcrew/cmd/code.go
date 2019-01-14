@@ -8,133 +8,117 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type Code struct {
-	ID         string
-	Identifier string `json:",omitempty"`
-	Status     lib.Status
-	Fields     map[string]interface{}
-	Bid        int32  `json:",omitempty"`
-	Error      string `json:",omitempty"`
-}
-
-//define struct to store values from CLI input (flags)
-type Args struct {
-	GithubAuthToken string
-	GithubRepo      string
-	GithubCodeType  string
-	CodeId          string
-	Name            string
-}
-
-//define command functions
 func getCmdCode() *cobra.Command {
-	var cmdCode = &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "code",
 		Short: "Handles coding tasks.",
 		Long:  "",
 	}
 
-	cmdCode.AddCommand(getCmdCodeNew())
-	cmdCode.AddCommand(getCmdCodeInit())
-	cmdCode.AddCommand(geCmdCodeGet())
-	cmdCode.AddCommand(getCmdCodeList())
-	cmdCode.AddCommand(getCmdCodeApprove())
+	cmd.AddCommand(getCmdCodeNew())
+	cmd.AddCommand(getCmdCodeInit())
+	cmd.AddCommand(geCmdCodeGet())
+	cmd.AddCommand(getCmdCodeList())
+	cmd.AddCommand(getCmdCodeApprove())
 
-	return cmdCode
+	return cmd
 }
 
 func getCmdCodeNew() *cobra.Command {
-	cmdArgs := new(Args)
+	var githubAuthToken string
+	var githubRepo string
+	var codeType string
 
-	var cmdCodeNew = &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "new [options]",
 		Short: "Create new coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(utils.ConvertStructToJson(&Code{}))
+			fmt.Println(utils.ConvertStructToJson(&lib.Output{}))
 		},
 	}
 
-	cmdCodeNew.Flags().StringVar(&cmdArgs.GithubAuthToken, "github-auth-token", "", "github auth token.")
-	cmdCodeNew.MarkFlagRequired("github-auth-token")
+	cmd.Flags().StringVar(&githubAuthToken, "github-auth-token", "", "github auth token.")
+	cmd.MarkFlagRequired("github-auth-token")
 
-	cmdCodeNew.Flags().StringVar(&cmdArgs.GithubRepo, "github-repo", "", "github repo.")
-	cmdCodeNew.MarkFlagRequired("github-repo")
+	cmd.Flags().StringVar(&githubRepo, "github-repo", "", "github repo.")
+	cmd.MarkFlagRequired("github-repo")
 
-	cmdCodeNew.Flags().StringVar(&cmdArgs.GithubCodeType, "code-type", "", "github code type.")
-	cmdCodeNew.MarkFlagRequired("code-type")
+	cmd.Flags().StringVar(&codeType, "code-type", "", "github code type.")
+	cmd.MarkFlagRequired("code-type")
 
-	return cmdCodeNew
+	return cmd
 }
 
 func getCmdCodeInit() *cobra.Command {
-	cmdArgs := new(Args)
+	var codeType string
+	var name string
 
-	var cmdCodeInit = &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "init [options]",
 		Short: "Init coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(utils.ConvertStructToJson(&Code{}))
+			fmt.Println(utils.ConvertStructToJson(&lib.Output{}))
 		},
 	}
 
-	cmdCodeInit.Flags().StringVar(&cmdArgs.GithubCodeType, "code-type", "", "github code type.")
-	cmdCodeInit.MarkFlagRequired("code-type")
+	cmd.Flags().StringVar(&codeType, "code-type", "", "github code type.")
+	cmd.MarkFlagRequired("code-type")
 
-	cmdCodeInit.Flags().StringVar(&cmdArgs.Name, "name", "", "name.")
-	cmdCodeInit.MarkFlagRequired("name")
+	cmd.Flags().StringVar(&name, "name", "", "name.")
+	cmd.MarkFlagRequired("name")
 
-	return cmdCodeInit
+	return cmd
 }
 
 func geCmdCodeGet() *cobra.Command {
-	cmdArgs := new(Args)
+	var id string
 
-	var cmdCodeGet = &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "get [options]",
 		Short: "Show single coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(utils.ConvertStructToJson(&Code{}))
+			fmt.Println(utils.ConvertStructToJson(&lib.Output{}))
 		},
 	}
 
-	cmdCodeGet.Flags().StringVar(&cmdArgs.CodeId, "id", "", "Id of code that will be approved")
-	cmdCodeGet.MarkFlagRequired("id")
+	cmd.Flags().StringVar(&id, "id", "", "Id of code that shown")
+	cmd.MarkFlagRequired("id")
 
-	return cmdCodeGet
+	return cmd
 }
 
 func getCmdCodeApprove() *cobra.Command {
-	cmdArgs := new(Args)
+	var id string
 
-	var cmdCodeApprove = &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "approve [options]",
 		Short: "Approve coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(utils.ConvertStructToJson(&Code{}))
+			fmt.Println(utils.ConvertStructToJson(&lib.Output{}))
 		},
 	}
 
-	cmdCodeApprove.Flags().StringVar(&cmdArgs.CodeId, "id", "", "Id of code that will be approved")
-	cmdCodeApprove.MarkFlagRequired("id")
+	cmd.Flags().StringVar(&id, "id", "", "Id of code that will be approved")
+	cmd.MarkFlagRequired("id")
 
-	return cmdCodeApprove
+	return cmd
 }
 
 func getCmdCodeList() *cobra.Command {
-	var cmdCodeList = &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "Show all coding tasks.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(utils.ConvertStructToJson(&Code{}))
+			fmt.Println(utils.ConvertStructToJson(&lib.Output{}))
 		},
 	}
 
-	return cmdCodeList
+	return cmd
 }
 
 func init() {
