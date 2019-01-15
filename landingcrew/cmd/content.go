@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/landingcrew-cli/landingcrew/lib"
+	"github.com/abhiyerra/landingcrew-cli/lib"
 	"github.com/spf13/cobra"
 )
 
