@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/landingcrew-cli/landingcrew/cmd"
+	"github.com/abhiyerra/landingcrew-cli/cmd"
 )
 
 func main() {

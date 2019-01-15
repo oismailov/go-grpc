@@ -1,4 +1,4 @@
-module github.com/abhiyerra/landingcrew/landingcrew
+module github.com/abhiyerra/landingcrew-cli
 
 require (
 	github.com/mitchellh/go-homedir v1.0.0 // indirect
