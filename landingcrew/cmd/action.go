@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/landingcrew-cli/landingcrew/lib"
-	"github.com/landingcrew-cli/landingcrew/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -27,7 +26,7 @@ func getCmdActionList() *cobra.Command {
 		Short: "Show all actions.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(utils.ConvertStructToJson(&lib.Output{}))
+			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
 		},
 	}
 
@@ -42,7 +41,7 @@ func geCmdActionGet() *cobra.Command {
 		Short: "Show single action.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(utils.ConvertStructToJson(&lib.Output{}))
+			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
 		},
 	}
 

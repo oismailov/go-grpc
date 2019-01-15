@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/landingcrew-cli/landingcrew/lib"
-	"github.com/landingcrew-cli/landingcrew/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -34,7 +33,7 @@ func getCmdCodeNew() *cobra.Command {
 		Short: "Create new coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(utils.ConvertStructToJson(&lib.Output{}))
+			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
 		},
 	}
 
@@ -59,7 +58,7 @@ func getCmdCodeInit() *cobra.Command {
 		Short: "Init coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(utils.ConvertStructToJson(&lib.Output{}))
+			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
 		},
 	}
 
@@ -80,7 +79,7 @@ func geCmdCodeGet() *cobra.Command {
 		Short: "Show single coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(utils.ConvertStructToJson(&lib.Output{}))
+			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
 		},
 	}
 
@@ -98,7 +97,7 @@ func getCmdCodeApprove() *cobra.Command {
 		Short: "Approve coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(utils.ConvertStructToJson(&lib.Output{}))
+			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
 		},
 	}
 
@@ -114,7 +113,7 @@ func getCmdCodeList() *cobra.Command {
 		Short: "Show all coding tasks.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(utils.ConvertStructToJson(&lib.Output{}))
+			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
 		},
 	}
 

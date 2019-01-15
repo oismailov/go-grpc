@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/landingcrew-cli/landingcrew/lib"
-	"github.com/landingcrew-cli/landingcrew/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -30,7 +29,7 @@ func getCmdContentList() *cobra.Command {
 		Short: "Show all content tasks.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(utils.ConvertStructToJson(&lib.Output{}))
+			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
 		},
 	}
 
@@ -45,7 +44,7 @@ func geCmdContentGet() *cobra.Command {
 		Short: "Show single content task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(utils.ConvertStructToJson(&lib.Output{}))
+			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
 		},
 	}
 
@@ -64,7 +63,7 @@ func getCmdContentNew() *cobra.Command {
 		Short: "Create new content task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(utils.ConvertStructToJson(&lib.Output{}))
+			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
 		},
 	}
 
@@ -86,7 +85,7 @@ func getCmdContentInit() *cobra.Command {
 		Short: "Init content task",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(utils.ConvertStructToJson(&lib.Output{}))
+			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
 		},
 	}
 
@@ -105,7 +104,7 @@ func getCmdContentTypeList() *cobra.Command {
 		Short: "List content type",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(utils.ConvertStructToJson(&lib.Output{}))
+			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
 		},
 	}
 

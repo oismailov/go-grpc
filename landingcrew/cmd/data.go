@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/landingcrew-cli/landingcrew/lib"
-	"github.com/landingcrew-cli/landingcrew/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -28,7 +27,7 @@ func getCmdDataList() *cobra.Command {
 		Short: "Show all data.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(utils.ConvertStructToJson(&lib.Output{}))
+			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
 		},
 	}
 
@@ -43,7 +42,7 @@ func geCmdDataGet() *cobra.Command {
 		Short: "Show single data.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(utils.ConvertStructToJson(&lib.Output{}))
+			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
 		},
 	}
 
@@ -59,7 +58,7 @@ func getCmdDataNew() *cobra.Command {
 		Short: "Create new data.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(utils.ConvertStructToJson(&lib.Output{}))
+			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
 		},
 	}
 
