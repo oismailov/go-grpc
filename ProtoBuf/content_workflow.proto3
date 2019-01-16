@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+service ContentWorkflow {
+  rpc New(ContentRequest) returns (ContentResponse) {}
+  rpc Get(ContentRequest) returns (ContentResponse) {}
+  rpc List(google.protobuf.Empty) returns (stream ContentResponse) {}
+}
+
+message ContentRequest {
+  string name = 1;
+}
+
+message ContentResponse {
+  string message = 1;
+}

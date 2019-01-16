@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+service ActionWorkflow {
+  rpc New(ActionRequest) returns (ActionResponse) {}
+  rpc Get(ActionRequest) returns (ActionResponse) {}
+  rpc List(google.protobuf.Empty) returns (stream ActionResponse) {}
+}
+
+message ActionRequest {
+  string name = 1;
+}
+
+message ActionResponse {
+  string message = 1;
+}

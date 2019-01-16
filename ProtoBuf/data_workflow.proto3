@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+service DataWorkflow {
+  rpc New(DataRequest) returns (DataResponse) {}
+  rpc Get(DataRequest) returns (DataResponse) {}
+  rpc List(google.protobuf.Empty) returns (stream DataResponse) {}
+}
+
+enum DataType {
+  Collect = 0;
+  Clean = 1;
+}
+
+message DataRequest {
+  DataType type = 1;
+  string identifier = 2;
+}
+
+message DataResponse {
+  string message = 1;
+}
