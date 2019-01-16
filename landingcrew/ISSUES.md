@@ -33,7 +33,7 @@ Return as JSON: type Output struct {
 }
 ```
 
-# code approve --id id
+# code decide --id id --decision approve
 
 ```
 POST request
