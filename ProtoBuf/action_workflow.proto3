@@ -9,9 +9,15 @@ service ActionWorkflow {
 }
 
 message ActionRequest {
-  string name = 1;
+  string identifier = 1;
+  string title = 2;
+  string instructions = 3;
+  string instruction_video = 4;
+  map<string, string> secrets = 5;
 }
 
 message ActionResponse {
-  string message = 1;
+  string id = 1;
+  string identifier = 2;
+  string status = 3;
 }
