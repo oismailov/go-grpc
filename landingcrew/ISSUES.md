@@ -120,6 +120,10 @@ Return as JSON: type Output struct {
 
 # data list
 
+DataWorkflow::List
+
+https://grpc.io/docs/tutorials/basic/go.html#generating-client-and-server-code
+
 Same as `code list`
 
 # action new
@@ -144,4 +148,14 @@ Return as JSON: type Output struct {
 
 # action list
 
-Same as `code list`
+ActionWorkflow::List
+https://grpc.io/docs/tutorials/basic/go.html\#generating-client-and-server-code
+
+ - Need to make a GRPC client call. Have to include the relavant grpc packages.
+ - Checkout the `workflow` dir for the calls
+
+Should also do the following:
+
+ - [ ] https://github.com/abhiyerra/landingcrew-cli/issues/67
+ - [ ] https://github.com/abhiyerra/landingcrew-cli/issues/72
+ - [ ] https://github.com/abhiyerra/landingcrew-cli/issues/75
