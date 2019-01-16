@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+service CodeWorkflow {
+  rpc New(CodeRequest) returns (CodeResponse) {}
+  rpc Get(CodeRequest) returns (CodeResponse) {}
+  rpc List(google.protobuf.Empty) returns (stream CodeResponse) {}
+
+  rpc Decide(CodeDecision) returns (google.protobuf.Empty) {}
+}
+
+enum CodeType {
+    RUBY_LAMBDA = 0;
+}
+
+message CodeRequest {
+    string name = 1;
+}
+
+message CodeResponse {
+    string message = 1;
+}
+
+enum CodeDecisionType {
+    APPROVE = 0;
+    REJECT = 1;
+}
+
+message CodeDecision {
+    string id = 1;
+    CodeDecisionType decison = 2;
+    string body = 3;
+}
