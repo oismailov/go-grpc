@@ -1,11 +1,21 @@
 syntax = "proto3";
 
 import "google/protobuf/empty.proto";
+import "fields.proto3";
 
 service DataWorkflow {
   rpc New(DataRequest) returns (DataResponse) {}
   rpc Get(DataRequest) returns (DataResponse) {}
   rpc List(google.protobuf.Empty) returns (stream DataResponse) {}
+
+  rpc Sync(DataRecord) returns (DataRecord) {}
+}
+
+enum StreamSource {
+  CSV = 0;
+  Streaming = 1;
+
+  Airtable = 2;
 }
 
 enum DataType {
@@ -20,4 +30,11 @@ message DataRequest {
 
 message DataResponse {
   string message = 1;
+}
+
+message DataRecord {
+  string id = 1;
+  string identifier = 2;
+  string status = 3;
+  repeated Field fields = 4;
 }
