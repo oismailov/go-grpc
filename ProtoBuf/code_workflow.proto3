@@ -24,7 +24,13 @@ message CodeRequest {
 }
 
 message CodeResponse {
-    string message = 1;
+    string id = 1;
+    string identifier = 2;
+    string status = 3;
+
+    message Github {
+        string repo = 1;
+    }
 }
 
 enum CodeDecisionType {
