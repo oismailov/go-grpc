@@ -1,31 +1,32 @@
-# LandingCrew CLI
+LandingCrew CLI
 
-LandingCrew CLI is a tool to quickly create work tasks using the command
-line.
-
+LandingCrew CLI allows quick access to a workforce for various tasks.
 
 # Usage
 
-```
-configure github
+## Code
 
-code init
-   --type (LambdaRuby,LambdaPython,LambdaNodejs)
-   --name <Name>
-   --dir
+### Initialize New Code
 
-   - Download template from website
+code init --code-type Type --name Name
 
-code new --github-auth-token|ENV['GITHUB_AUTH_TOKEN'] --github-repo <abhiyerra/landingcrew> --type <type>
+### Create New Code from Dir
 
-    - Check for landingcrew.json
+code new-from-dir --code-type type --dir .
+
+### Create New Code from Github Repo
+
+code new-from-repo --github-auth-token --github-repo abhiyerra/landingcrew --code-type type
+
     - Check for Readme
     - Check that there are Github Issues
     - Add LandingCrewWorker as a contributor to the repo.
 
         Return: {"ID": id}
 
-code get --id <id>
+### Get the code
+
+code get --id id
 
     Return as JSON: type Output struct {
             ID         string
@@ -37,42 +38,39 @@ code get --id <id>
             Error string `json:",omitempty"`
     }
 
-code approve --id <id>
+## Decide on Approval
 
-     POST request
+code approve --id id
 
+## Decide on Reject
 
-code list
+code reject --id id --reason ""
 
-    [
-    Output struct {
-                ID         string
-                Identifier string `json:",omitempty"`
-                Status     Status
-                Fields     map[string]interface{}
-                Bid int32 `json:",omitempty"`
+## code list
 
-                Error string `json:",omitempty"`
-        },
+## code list-type
 
-    ]
+# Content
 
-content init --type
+## Initialize New Type of Content
 
+content init --type Type
+
+```json
 {
-        "Title": "",
-        "Instructions": ""
-        "FieldInstructions": [
-            {
-            "Name": "Name",
-            "Instructions": ""
-            "Type": ""
-            }
-        ]
+        "Name": "",
+        "Type": "",
+        "Instructions": "",
 }
+```
 
-content new --type <type> --file=@file.md
-content get
+## Create New Content
+
+content new --config ./config.json
+
+## Get Content
+
+content get --id id
 
     Return as JSON: type Output struct {
             ID         string
@@ -83,24 +81,99 @@ content get
             Error string `json:",omitempty"`
     }
 
-content list
+## Get Content List
 
-data new
+# Data
+
+## Initialize New Data Task
+
+data init
+
+## Create New CSV
+
+data new-csv --config config.json file
+
+```json
+{
+    "Identifier": "",
+    "Name": "",
+    "Instructions": "",
+    "InstructionVideo": "",
+    "Fields": [
+        {
+            "Type": "",
+            "Instructions": ""
+        }
+    ]
+}
+```
+
+## Create New Airtable Data
+
+data new --config config.json
+
+```json
+{
+    "Identifier": "",
+    "Name": "",
+    "Instructions": "",
+    "InstructionVideo": "",
+    "Fields": [
+        {
+            "Name": "",
+            "Type": "",
+            "Instructions": ""
+        }
+    ],
+    "Stream": {
+        "Type": "AirtableDataType",
+        "AirtableApiKey": "",
+        "AirtableAppKey": "",
+        "AirtableTable": ""
+    }
+}
+```
+
+## Create New Database
+
+data new --config config.json
+
+
+## Get Data
+
 data get --id <id>
 
     Return as JSON: type Output struct {
             ID         string
             Identifier string `json:",omitempty"`
             Status     Status
-            Fields     map[string]interface{}
-
             Error string `json:",omitempty"`
     }
 
+### Get Csv Data
+
+data get-csv --id <id>
+
+
+## List Data
+
 data list
 
+
+## Sync Data
+
+data sync --id id
+
+# Actions
+
+## Create
+
 action new
-action get --id <id>
+
+  --file
+  --title --instructions --instruction-video
+
+### action get --id <id>
 
     Return as JSON: type Output struct {
             ID         string
@@ -111,5 +184,4 @@ action get --id <id>
             Error string `json:",omitempty"`
     }
 
-action list
-```
+### action list
