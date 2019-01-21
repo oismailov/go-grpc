@@ -1,13 +1,15 @@
 syntax = "proto3";
 
 import "fields.proto3";
+import "state.proto3";
 
-	// RunConds []Cond
-	// ContinueConds []Cond
-    // DoneConds []Cond
+// RunConds []Cond
+// ContinueConds []Cond
+// DoneConds []Cond
 
 message TaskBody {
     string Identifier = 1;
     repeated Field Fields = 2;
     map<string, string> Environment = 3;
+    State State = 4;
 }
