@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+import "fields.proto3";
+
+	// RunConds []Cond
+	// ContinueConds []Cond
+    // DoneConds []Cond
+
+message TaskBody {
+    string Identifier = 1;
+    repeated Field Fields = 2;
+    map<string, string> Environment = 3;
+}
