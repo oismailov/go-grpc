@@ -12,10 +12,15 @@ service CodeWorkflow {
 
 enum CodeType {
     RUBY_LAMBDA = 0;
+    NODEJS_LAMBDA = 1;
+    PYTHON_LAMBDA = 2;
+    REACTJS = 3;
+    REACTJS_COMPONENT = 4;
 }
 
 message CodeRequest {
-    string name = 1;
+    string identifier = 1;
+    CodeType type = 2;
 }
 
 message CodeResponse {
