@@ -2,9 +2,15 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/abhiyerra/landingcrew-cli/landingcrew/lib"
+	"github.com/golang/protobuf/ptypes/empty"
+	"io"
+	"log"
+	"os"
 
-	"github.com/abhiyerra/landingcrew-cli/lib"
 	"github.com/spf13/cobra"
+
+	"context"
 )
 
 func getCmdContent() *cobra.Command {
@@ -29,7 +35,24 @@ func getCmdContentList() *cobra.Command {
 		Short: "Show all content tasks.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+
+			stream, err := contentWorkflowClient.List(context.Background(), &empty.Empty{})
+			if err != nil {
+				log.Fatalf("Could not read from stream: %s", err)
+			}
+
+			for {
+				response, err := stream.Recv()
+
+				if err != nil {
+					if err == io.EOF {
+						break
+					}
+					os.Exit(1)
+				}
+
+				fmt.Printf("%v", lib.ConvertStructToJson(response))
+			}
 		},
 	}
 
@@ -44,7 +67,7 @@ func geCmdContentGet() *cobra.Command {
 		Short: "Show single content task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+
 		},
 	}
 
@@ -63,7 +86,7 @@ func getCmdContentNew() *cobra.Command {
 		Short: "Create new content task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+
 		},
 	}
 
@@ -85,7 +108,7 @@ func getCmdContentInit() *cobra.Command {
 		Short: "Init content task",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+
 		},
 	}
 
@@ -104,7 +127,7 @@ func getCmdContentTypeList() *cobra.Command {
 		Short: "List content type",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+
 		},
 	}
 

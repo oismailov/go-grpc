@@ -1,10 +1,14 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
-
-	"github.com/abhiyerra/landingcrew-cli/lib"
+	"github.com/abhiyerra/landingcrew-cli/landingcrew/lib"
+	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/spf13/cobra"
+	"io"
+	"log"
+	"os"
 )
 
 func getCmdCode() *cobra.Command {
@@ -33,7 +37,7 @@ func getCmdCodeNew() *cobra.Command {
 		Short: "Create new coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+
 		},
 	}
 
@@ -58,7 +62,7 @@ func getCmdCodeInit() *cobra.Command {
 		Short: "Init coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+
 		},
 	}
 
@@ -79,7 +83,7 @@ func geCmdCodeGet() *cobra.Command {
 		Short: "Show single coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+
 		},
 	}
 
@@ -97,7 +101,7 @@ func getCmdCodeApprove() *cobra.Command {
 		Short: "Approve coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+
 		},
 	}
 
@@ -113,7 +117,24 @@ func getCmdCodeList() *cobra.Command {
 		Short: "Show all coding tasks.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+			stream, err := codeWorkflowClient.List(context.Background(), &empty.Empty{})
+
+			if err != nil {
+				log.Fatalf("Could not read from stream: %s", err)
+			}
+
+			for {
+				response, err := stream.Recv()
+
+				if err != nil {
+					if err == io.EOF {
+						break
+					}
+					os.Exit(1)
+				}
+
+				fmt.Printf("%v", lib.ConvertStructToJson(response))
+			}
 		},
 	}
 

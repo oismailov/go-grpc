@@ -2,9 +2,15 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/abhiyerra/landingcrew-cli/landingcrew/lib"
+	"github.com/golang/protobuf/ptypes/empty"
+	"io"
+	"log"
 
-	"github.com/abhiyerra/landingcrew-cli/lib"
 	"github.com/spf13/cobra"
+
+	"context"
+	"os"
 )
 
 func getCmdData() *cobra.Command {
@@ -27,7 +33,24 @@ func getCmdDataList() *cobra.Command {
 		Short: "Show all data.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+			stream, err := dataWorkflowClient.List(context.Background(), &empty.Empty{})
+
+			if err != nil {
+				log.Fatalf("Could not read from stream: %s", err)
+			}
+
+			for {
+				response, err := stream.Recv()
+
+				if err != nil {
+					if err == io.EOF {
+						break
+					}
+					os.Exit(1)
+				}
+
+				fmt.Printf("%v", lib.ConvertStructToJson(response))
+			}
 		},
 	}
 
@@ -42,7 +65,7 @@ func geCmdDataGet() *cobra.Command {
 		Short: "Show single data.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+
 		},
 	}
 
@@ -58,7 +81,7 @@ func getCmdDataNew() *cobra.Command {
 		Short: "Create new data.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+
 		},
 	}
 

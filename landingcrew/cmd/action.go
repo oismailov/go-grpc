@@ -1,10 +1,14 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
-
-	"github.com/abhiyerra/landingcrew-cli/lib"
+	"github.com/abhiyerra/landingcrew-cli/landingcrew/lib"
+	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/spf13/cobra"
+	"io"
+	"log"
+	"os"
 )
 
 func getCmdAction() *cobra.Command {
@@ -26,7 +30,24 @@ func getCmdActionList() *cobra.Command {
 		Short: "Show all actions.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+			stream, err := actionWorkflowClient.List(context.Background(), &empty.Empty{})
+
+			if err != nil {
+				log.Fatalf("Could not read from stream: %s", err)
+			}
+
+			for {
+				response, err := stream.Recv()
+
+				if err != nil {
+					if err == io.EOF {
+						break
+					}
+					os.Exit(1)
+				}
+
+				fmt.Printf("%v", lib.ConvertStructToJson(response))
+			}
 		},
 	}
 
@@ -41,7 +62,7 @@ func geCmdActionGet() *cobra.Command {
 		Short: "Show single action.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+
 		},
 	}
 
