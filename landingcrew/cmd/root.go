@@ -16,10 +16,12 @@ var rootCmd = &cobra.Command{
 	Long:  "Here will be long description",
 }
 
-var ActionWorkflowClient pb.ActionWorkflowClient
-var CodeWorkflowClient pb.CodeWorkflowClient
-var ContentWorkflowClient pb.ContentWorkflowClient
-var DataWorkflowClient pb.DataWorkflowClient
+var (
+	ActionWorkflowClient  pb.ActionWorkflowClient
+	CodeWorkflowClient    pb.CodeWorkflowClient
+	ContentWorkflowClient pb.ContentWorkflowClient
+	DataWorkflowClient    pb.DataWorkflowClient
+)
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
