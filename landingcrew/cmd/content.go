@@ -2,16 +2,13 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/abhiyerra/landingcrew-cli/landingcrew/grpc_client"
+	"github.com/abhiyerra/landingcrew-cli/landingcrew/lib"
 	"github.com/golang/protobuf/ptypes/empty"
-	"google.golang.org/grpc"
+	"io"
 	"log"
 	"os"
 
-	"github.com/abhiyerra/landingcrew-cli/landingcrew/lib"
 	"github.com/spf13/cobra"
-
-	pb "github.com/abhiyerra/landingcrew-cli/landingcrew/workflow"
 
 	"context"
 )
@@ -23,11 +20,7 @@ func getCmdContent() *cobra.Command {
 		Long:  "",
 	}
 
-	conn, ctx, cancelFunc := grpc_client.GetConnectionSetting()
-
-	client := pb.NewContentWorkflowClient(conn)
-
-	cmd.AddCommand(getCmdContentList(client, ctx, cancelFunc, conn))
+	cmd.AddCommand(getCmdContentList())
 	cmd.AddCommand(geCmdContentGet())
 	cmd.AddCommand(getCmdContentNew())
 	cmd.AddCommand(getCmdContentInit())
@@ -36,36 +29,30 @@ func getCmdContent() *cobra.Command {
 	return cmd
 }
 
-func getCmdContentList(client pb.ContentWorkflowClient, ctx context.Context, cancelFunc context.CancelFunc, conn *grpc.ClientConn) *cobra.Command {
+func getCmdContentList() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "Show all content tasks.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			defer conn.Close()
-			defer cancelFunc()
 
-			stream, err := client.List(ctx, &empty.Empty{})
-
+			stream, err := ContentWorkflowClient.List(context.Background(), &empty.Empty{})
 			if err != nil {
 				log.Fatalf("Could not read from stream: %s", err)
 			}
 
-			waitc := make(chan struct{})
+			for {
+				response, err := stream.Recv()
 
-			go func() {
-				for {
-					r, err := stream.Recv()
-
-					if err != nil {
-						os.Exit(1)
+				if err != nil {
+					if err == io.EOF {
+						break
 					}
-
-					fmt.Printf("%s", lib.ConvertStructToJson(&lib.Output{Error: r.Message}))
+					os.Exit(1)
 				}
-			}()
-			<-waitc
-			stream.CloseSend()
+
+				fmt.Printf("%v", lib.ConvertStructToJson(response))
+			}
 		},
 	}
 
@@ -80,7 +67,7 @@ func geCmdContentGet() *cobra.Command {
 		Short: "Show single content task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+
 		},
 	}
 
@@ -99,7 +86,7 @@ func getCmdContentNew() *cobra.Command {
 		Short: "Create new content task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+
 		},
 	}
 
@@ -121,7 +108,7 @@ func getCmdContentInit() *cobra.Command {
 		Short: "Init content task",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+
 		},
 	}
 
@@ -140,7 +127,7 @@ func getCmdContentTypeList() *cobra.Command {
 		Short: "List content type",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+
 		},
 	}
 

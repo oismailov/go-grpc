@@ -3,12 +3,10 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"github.com/abhiyerra/landingcrew-cli/landingcrew/grpc_client"
 	"github.com/abhiyerra/landingcrew-cli/landingcrew/lib"
-	pb "github.com/abhiyerra/landingcrew-cli/landingcrew/workflow"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/spf13/cobra"
-	"google.golang.org/grpc"
+	"io"
 	"log"
 	"os"
 )
@@ -20,46 +18,36 @@ func getCmdAction() *cobra.Command {
 		Long:  "",
 	}
 
-	conn, ctx, cancelFunc := grpc_client.GetConnectionSetting()
-
-	client := pb.NewActionWorkflowClient(conn)
-
-	cmd.AddCommand(getCmdActionList(client, ctx, cancelFunc, conn))
+	cmd.AddCommand(getCmdActionList())
 	cmd.AddCommand(geCmdActionGet())
 
 	return cmd
 }
 
-func getCmdActionList(client pb.ActionWorkflowClient, ctx context.Context, cancelFunc context.CancelFunc, conn *grpc.ClientConn) *cobra.Command {
+func getCmdActionList() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "Show all actions.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			defer conn.Close()
-			defer cancelFunc()
-
-			stream, err := client.List(ctx, &empty.Empty{})
+			stream, err := ActionWorkflowClient.List(context.Background(), &empty.Empty{})
 
 			if err != nil {
 				log.Fatalf("Could not read from stream: %s", err)
 			}
 
-			waitc := make(chan struct{})
+			for {
+				response, err := stream.Recv()
 
-			go func() {
-				for {
-					r, err := stream.Recv()
-
-					if err != nil {
-						os.Exit(1)
+				if err != nil {
+					if err == io.EOF {
+						break
 					}
-
-					fmt.Printf("%s", lib.ConvertStructToJson(&lib.Output{Error: r.Message}))
+					os.Exit(1)
 				}
-			}()
-			<-waitc
-			stream.CloseSend()
+
+				fmt.Printf("%v", lib.ConvertStructToJson(response))
+			}
 		},
 	}
 
@@ -74,7 +62,7 @@ func geCmdActionGet() *cobra.Command {
 		Short: "Show single action.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+
 		},
 	}
 

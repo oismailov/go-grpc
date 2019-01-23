@@ -3,12 +3,10 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"github.com/abhiyerra/landingcrew-cli/landingcrew/grpc_client"
 	"github.com/abhiyerra/landingcrew-cli/landingcrew/lib"
-	pb "github.com/abhiyerra/landingcrew-cli/landingcrew/workflow"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/spf13/cobra"
-	"google.golang.org/grpc"
+	"io"
 	"log"
 	"os"
 )
@@ -20,14 +18,10 @@ func getCmdCode() *cobra.Command {
 		Long:  "",
 	}
 
-	conn, ctx, cancelFunc := grpc_client.GetConnectionSetting()
-
-	client := pb.NewCodeWorkflowClient(conn)
-
 	cmd.AddCommand(getCmdCodeNew())
 	cmd.AddCommand(getCmdCodeInit())
 	cmd.AddCommand(geCmdCodeGet())
-	cmd.AddCommand(getCmdCodeList(client, ctx, cancelFunc, conn))
+	cmd.AddCommand(getCmdCodeList())
 	cmd.AddCommand(getCmdCodeApprove())
 
 	return cmd
@@ -43,7 +37,7 @@ func getCmdCodeNew() *cobra.Command {
 		Short: "Create new coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+
 		},
 	}
 
@@ -68,7 +62,7 @@ func getCmdCodeInit() *cobra.Command {
 		Short: "Init coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+
 		},
 	}
 
@@ -89,7 +83,7 @@ func geCmdCodeGet() *cobra.Command {
 		Short: "Show single coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+
 		},
 	}
 
@@ -107,7 +101,7 @@ func getCmdCodeApprove() *cobra.Command {
 		Short: "Approve coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+
 		},
 	}
 
@@ -117,36 +111,30 @@ func getCmdCodeApprove() *cobra.Command {
 	return cmd
 }
 
-func getCmdCodeList(client pb.CodeWorkflowClient, ctx context.Context, cancelFunc context.CancelFunc, conn *grpc.ClientConn) *cobra.Command {
+func getCmdCodeList() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "Show all coding tasks.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			defer conn.Close()
-			defer cancelFunc()
-
-			stream, err := client.List(ctx, &empty.Empty{})
+			stream, err := CodeWorkflowClient.List(context.Background(), &empty.Empty{})
 
 			if err != nil {
 				log.Fatalf("Could not read from stream: %s", err)
 			}
 
-			waitc := make(chan struct{})
+			for {
+				response, err := stream.Recv()
 
-			go func() {
-				for {
-					r, err := stream.Recv()
-
-					if err != nil {
-						os.Exit(1)
+				if err != nil {
+					if err == io.EOF {
+						break
 					}
-
-					fmt.Printf("%s", lib.ConvertStructToJson(&lib.Output{Error: r.Message}))
+					os.Exit(1)
 				}
-			}()
-			<-waitc
-			stream.CloseSend()
+
+				fmt.Printf("%v", lib.ConvertStructToJson(response))
+			}
 		},
 	}
 

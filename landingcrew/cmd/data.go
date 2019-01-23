@@ -2,15 +2,12 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/abhiyerra/landingcrew-cli/landingcrew/grpc_client"
+	"github.com/abhiyerra/landingcrew-cli/landingcrew/lib"
 	"github.com/golang/protobuf/ptypes/empty"
-	"google.golang.org/grpc"
+	"io"
 	"log"
 
-	"github.com/abhiyerra/landingcrew-cli/landingcrew/lib"
 	"github.com/spf13/cobra"
-
-	pb "github.com/abhiyerra/landingcrew-cli/landingcrew/workflow"
 
 	"context"
 	"os"
@@ -23,47 +20,37 @@ func getCmdData() *cobra.Command {
 		Long:  "",
 	}
 
-	conn, ctx, cancelFunc := grpc_client.GetConnectionSetting()
-
-	client := pb.NewDataWorkflowClient(conn)
-
-	cmd.AddCommand(getCmdDataList(client, ctx, cancelFunc, conn))
+	cmd.AddCommand(getCmdDataList())
 	cmd.AddCommand(geCmdDataGet())
 	cmd.AddCommand(getCmdDataNew())
 
 	return cmd
 }
 
-func getCmdDataList(client pb.DataWorkflowClient, ctx context.Context, cancelFunc context.CancelFunc, conn *grpc.ClientConn) *cobra.Command {
+func getCmdDataList() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "Show all data.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			defer conn.Close()
-			defer cancelFunc()
-
-			stream, err := client.List(ctx, &empty.Empty{})
+			stream, err := DataWorkflowClient.List(context.Background(), &empty.Empty{})
 
 			if err != nil {
 				log.Fatalf("Could not read from stream: %s", err)
 			}
 
-			waitc := make(chan struct{})
+			for {
+				response, err := stream.Recv()
 
-			go func() {
-				for {
-					r, err := stream.Recv()
-
-					if err != nil {
-						os.Exit(1)
+				if err != nil {
+					if err == io.EOF {
+						break
 					}
-
-					fmt.Printf("%s", lib.ConvertStructToJson(&lib.Output{Error: r.Message}))
+					os.Exit(1)
 				}
-			}()
-			<-waitc
-			stream.CloseSend()
+
+				fmt.Printf("%v", lib.ConvertStructToJson(response))
+			}
 		},
 	}
 
@@ -78,7 +65,7 @@ func geCmdDataGet() *cobra.Command {
 		Short: "Show single data.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+
 		},
 	}
 
@@ -94,7 +81,7 @@ func getCmdDataNew() *cobra.Command {
 		Short: "Create new data.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(lib.ConvertStructToJson(&lib.Output{}))
+
 		},
 	}
 
