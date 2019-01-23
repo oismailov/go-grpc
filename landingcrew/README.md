@@ -139,6 +139,34 @@ data new --config config.json
 data new --config config.json
 
 
+```json
+{
+    "Identifier": "",
+    "Name": "",
+    "Instructions": "",
+    "InstructionVideo": "",
+    "Fields": [
+        {
+            "Name": "",
+            "Type": "",
+            "Instructions": ""
+        }
+    ],
+    "Stream": {
+        "Type": "StreamDataType",
+    }
+}
+```
+
+
+data sync --id id
+
+```json
+
+
+```
+
+
 ## Get Data
 
 data get --id <id>
