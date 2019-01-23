@@ -19,7 +19,7 @@ enum CodeType {
 }
 
 message CodeRequest {
-    string identifier = 1;
+    string id = 1;
     CodeType type = 2;
 }
 
