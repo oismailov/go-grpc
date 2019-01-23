@@ -23,8 +23,9 @@ message CodeRequest {
     CodeType type = 2;
 
     message Github {
-        string full_repo = 1;
-        string issue_number = 2;
+        string auth_token = 1;
+        string full_repo = 2;
+        string issue_number = 3;
     }
 }
 
