@@ -36,7 +36,7 @@ func getCmdContentList() *cobra.Command {
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
 
-			stream, err := ContentWorkflowClient.List(context.Background(), &empty.Empty{})
+			stream, err := contentWorkflowClient.List(context.Background(), &empty.Empty{})
 			if err != nil {
 				log.Fatalf("Could not read from stream: %s", err)
 			}

@@ -117,7 +117,7 @@ func getCmdCodeList() *cobra.Command {
 		Short: "Show all coding tasks.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			stream, err := CodeWorkflowClient.List(context.Background(), &empty.Empty{})
+			stream, err := codeWorkflowClient.List(context.Background(), &empty.Empty{})
 
 			if err != nil {
 				log.Fatalf("Could not read from stream: %s", err)

@@ -33,7 +33,7 @@ func getCmdDataList() *cobra.Command {
 		Short: "Show all data.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			stream, err := DataWorkflowClient.List(context.Background(), &empty.Empty{})
+			stream, err := dataWorkflowClient.List(context.Background(), &empty.Empty{})
 
 			if err != nil {
 				log.Fatalf("Could not read from stream: %s", err)

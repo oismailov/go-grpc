@@ -17,10 +17,10 @@ var rootCmd = &cobra.Command{
 }
 
 var (
-	ActionWorkflowClient  pb.ActionWorkflowClient
-	CodeWorkflowClient    pb.CodeWorkflowClient
-	ContentWorkflowClient pb.ContentWorkflowClient
-	DataWorkflowClient    pb.DataWorkflowClient
+	actionWorkflowClient  pb.ActionWorkflowClient
+	codeWorkflowClient    pb.CodeWorkflowClient
+	contentWorkflowClient pb.ContentWorkflowClient
+	dataWorkflowClient    pb.DataWorkflowClient
 )
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -28,10 +28,10 @@ var (
 func Execute(conn *grpc.ClientConn) {
 	defer conn.Close()
 
-	ActionWorkflowClient = pb.NewActionWorkflowClient(conn)
-	CodeWorkflowClient = pb.NewCodeWorkflowClient(conn)
-	ContentWorkflowClient = pb.NewContentWorkflowClient(conn)
-	DataWorkflowClient = pb.NewDataWorkflowClient(conn)
+	actionWorkflowClient = pb.NewActionWorkflowClient(conn)
+	codeWorkflowClient = pb.NewCodeWorkflowClient(conn)
+	contentWorkflowClient = pb.NewContentWorkflowClient(conn)
+	dataWorkflowClient = pb.NewDataWorkflowClient(conn)
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)

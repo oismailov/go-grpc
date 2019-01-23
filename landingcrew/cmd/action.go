@@ -30,7 +30,7 @@ func getCmdActionList() *cobra.Command {
 		Short: "Show all actions.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			stream, err := ActionWorkflowClient.List(context.Background(), &empty.Empty{})
+			stream, err := actionWorkflowClient.List(context.Background(), &empty.Empty{})
 
 			if err != nil {
 				log.Fatalf("Could not read from stream: %s", err)
