@@ -24,8 +24,8 @@ enum DataType {
 }
 
 message DataRequest {
-  DataType type = 1;
-  string identifier = 2;
+  string id = 1;
+  DataType type = 2;
 }
 
 message DataResponse {
