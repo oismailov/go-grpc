@@ -21,16 +21,17 @@ enum CodeType {
 message CodeRequest {
     string id = 1;
     CodeType type = 2;
+
+    message Github {
+        string full_repo = 1;
+        string issue_number = 2;
+    }
 }
 
 message CodeResponse {
     string id = 1;
     string identifier = 2;
     string status = 3;
-
-    message Github {
-        string repo = 1;
-    }
 }
 
 enum CodeDecisionType {
