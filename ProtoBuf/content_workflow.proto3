@@ -8,9 +8,14 @@ service ContentWorkflow {
   rpc List(google.protobuf.Empty) returns (stream ContentResponse) {}
 }
 
+enum ContentType {
+  MARKETING_LANDING_PAGE = 0;
+}
+
 message ContentRequest {
   string id = 1;
   string name = 2;
+  ContentType type = 3;
 }
 
 message ContentResponse {
