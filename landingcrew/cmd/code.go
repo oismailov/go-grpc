@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/abhiyerra/landingcrew-cli/landingcrew/lib"
+	pb "github.com/abhiyerra/landingcrew-cli/landingcrew/workflow"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/spf13/cobra"
 	"io"
@@ -42,13 +43,19 @@ func getCmdCodeNew() *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&githubAuthToken, "github-auth-token", "", "github auth token.")
-	cmd.MarkFlagRequired("github-auth-token")
+	if err := cmd.MarkFlagRequired("github-auth-token"); err != nil {
+		log.Fatalf("Could not mark flag `github-auth-token` as required: %s", err)
+	}
 
 	cmd.Flags().StringVar(&githubRepo, "github-repo", "", "github repo.")
-	cmd.MarkFlagRequired("github-repo")
+	if err := cmd.MarkFlagRequired("github-repo"); err != nil {
+		log.Fatalf("Could not mark flag `github-repo` as required: %s", err)
+	}
 
 	cmd.Flags().StringVar(&codeType, "code-type", "", "github code type.")
-	cmd.MarkFlagRequired("code-type")
+	if err := cmd.MarkFlagRequired("code-type"); err != nil {
+		log.Fatalf("Could not mark flag `code-type` as required: %s", err)
+	}
 
 	return cmd
 }
@@ -67,10 +74,14 @@ func getCmdCodeInit() *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&codeType, "code-type", "", "github code type.")
-	cmd.MarkFlagRequired("code-type")
+	if err := cmd.MarkFlagRequired("code-type"); err != nil {
+		log.Fatalf("Could not mark flag `code-type` as required: %s", err)
+	}
 
 	cmd.Flags().StringVar(&name, "name", "", "name.")
-	cmd.MarkFlagRequired("name")
+	if err := cmd.MarkFlagRequired("name"); err != nil {
+		log.Fatalf("Could not mark flag `name` as required: %s", err)
+	}
 
 	return cmd
 }
@@ -83,12 +94,21 @@ func geCmdCodeGet() *cobra.Command {
 		Short: "Show single coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
+			response, err := codeWorkflowClient.Get(context.Background(), &pb.CodeRequest{Id: id})
 
+			if err != nil {
+				log.Fatalf("Could not get response from server: %s", err)
+			}
+
+			fmt.Printf("%v", lib.ConvertStructToJson(response))
 		},
 	}
 
 	cmd.Flags().StringVar(&id, "id", "", "Id of code that shown")
-	cmd.MarkFlagRequired("id")
+
+	if err := cmd.MarkFlagRequired("id"); err != nil {
+		log.Fatalf("Could not mark flag `id` as required: %s", err)
+	}
 
 	return cmd
 }
@@ -106,7 +126,9 @@ func getCmdCodeApprove() *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&id, "id", "", "Id of code that will be approved")
-	cmd.MarkFlagRequired("id")
+	if err := cmd.MarkFlagRequired("id"); err != nil {
+		log.Fatalf("Could not mark flag `id` as required: %s", err)
+	}
 
 	return cmd
 }

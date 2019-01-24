@@ -1,15 +1,14 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"github.com/abhiyerra/landingcrew-cli/landingcrew/lib"
+	pb "github.com/abhiyerra/landingcrew-cli/landingcrew/workflow"
 	"github.com/golang/protobuf/ptypes/empty"
+	"github.com/spf13/cobra"
 	"io"
 	"log"
-
-	"github.com/spf13/cobra"
-
-	"context"
 	"os"
 )
 
@@ -65,12 +64,20 @@ func geCmdDataGet() *cobra.Command {
 		Short: "Show single data.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
+			response, err := dataWorkflowClient.Get(context.Background(), &pb.DataRequest{Id: id})
 
+			if err != nil {
+				log.Fatalf("Could not get response from server: %s", err)
+			}
+
+			fmt.Printf("%v", lib.ConvertStructToJson(response))
 		},
 	}
 
 	cmd.Flags().StringVar(&id, "id", "", "Id of data that will be shown.")
-	cmd.MarkFlagRequired("id")
+	if err := cmd.MarkFlagRequired("id"); err != nil {
+		log.Fatalf("Could not mark flag `id` as required: %s", err)
+	}
 
 	return cmd
 }
