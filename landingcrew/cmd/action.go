@@ -21,6 +21,7 @@ func getCmdAction() *cobra.Command {
 
 	cmd.AddCommand(getCmdActionList())
 	cmd.AddCommand(geCmdActionGet())
+	cmd.AddCommand(getCmdActionNew())
 
 	return cmd
 }
@@ -77,6 +78,54 @@ func geCmdActionGet() *cobra.Command {
 	if err := cmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("Could not mark flag `id` as required: %s", err)
 	}
+
+	return cmd
+}
+
+func getCmdActionNew() *cobra.Command {
+	var title string
+	var instructions string
+	var instructionVideo string
+	var identifier string
+
+	cmd := &cobra.Command{
+		Use:   "new [options]",
+		Short: "Create new action task.",
+		Long:  "",
+		Run: func(cmd *cobra.Command, args []string) {
+			response, err := actionWorkflowClient.New(
+				context.Background(),
+				&pb.ActionRequest{
+					Title:            title,
+					Instructions:     instructions,
+					InstructionVideo: instructionVideo,
+					Identifier:       identifier,
+				})
+
+			if err != nil {
+				log.Fatalf("Could not get response from server: %s", err)
+			}
+
+			fmt.Printf("%v", lib.ConvertStructToJson(response))
+		},
+	}
+
+	cmd.Flags().StringVar(&title, "title", "", "")
+	if err := cmd.MarkFlagRequired("title"); err != nil {
+		log.Fatalf("Could not mark flag `title` as required: %s", err)
+	}
+
+	cmd.Flags().StringVar(&instructions, "instructions", "", "")
+	if err := cmd.MarkFlagRequired("instructions"); err != nil {
+		log.Fatalf("Could not mark flag `instructions` as required: %s", err)
+	}
+
+	cmd.Flags().StringVar(&instructionVideo, "instruction-video", "", "")
+	if err := cmd.MarkFlagRequired("instruction-video"); err != nil {
+		log.Fatalf("Could not mark flag `instruction-video` as required: %s", err)
+	}
+
+	cmd.Flags().StringVar(&identifier, "identifier", "", "")
 
 	return cmd
 }
