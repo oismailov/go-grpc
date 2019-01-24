@@ -24,6 +24,21 @@ func getCmdCode() *cobra.Command {
 	cmd.AddCommand(geCmdCodeGet())
 	cmd.AddCommand(getCmdCodeList())
 	cmd.AddCommand(getCmdCodeApprove())
+	cmd.AddCommand(getCmdCodeTypeList())
+
+	return cmd
+}
+
+func getCmdCodeTypeList() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "type-list [options]",
+		Short: "Output list of types.",
+		Long:  "",
+		Run: func(cmd *cobra.Command, args []string) {
+
+			fmt.Printf("%v", lib.ConvertStructToJson(pb.CodeType_value))
+		},
+	}
 
 	return cmd
 }
