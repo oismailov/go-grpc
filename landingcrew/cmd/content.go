@@ -145,7 +145,7 @@ func getCmdContentTypeList() *cobra.Command {
 		Short: "List content type",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-
+			fmt.Printf("%v", lib.ConvertStructToJson(pb.ContentType_value))
 		},
 	}
 
