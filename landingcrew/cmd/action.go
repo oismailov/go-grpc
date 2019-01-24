@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/abhiyerra/landingcrew-cli/landingcrew/lib"
+	pb "github.com/abhiyerra/landingcrew-cli/landingcrew/workflow"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/spf13/cobra"
 	"io"
@@ -62,12 +63,22 @@ func geCmdActionGet() *cobra.Command {
 		Short: "Show single action.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
+			response, err := actionWorkflowClient.Get(context.Background(), &pb.ActionRequest{Id: id})
 
+			if err != nil {
+				log.Fatalf("Could not get response from server: %s", err)
+			}
+
+			fmt.Printf("%v", lib.ConvertStructToJson(response))
 		},
 	}
 
 	cmd.Flags().StringVar(&id, "id", "", "Id of action that will be shown.")
-	cmd.MarkFlagRequired("id")
+	err := cmd.MarkFlagRequired("id")
+
+	if err != nil {
+		log.Fatalf("Could not mark flag `id` as required: %s", err)
+	}
 
 	return cmd
 }
