@@ -5,8 +5,8 @@ import "google/protobuf/empty.proto";
 service CodeWorkflow {
   rpc New(CodeRequest) returns (CodeResponse) {}
   rpc Get(CodeRequest) returns (CodeResponse) {}
+  rpc Init(CodeRequest) returns (CodeResponse) {}
   rpc List(google.protobuf.Empty) returns (stream CodeResponse) {}
-
   rpc Decide(CodeDecision) returns (google.protobuf.Empty) {}
 }
 
@@ -18,15 +18,16 @@ enum CodeType {
     REACTJS_COMPONENT = 4;
 }
 
+message Github {
+  string auth_token = 1;
+  string full_repo = 2;
+  string issue_number = 3;
+}
+
 message CodeRequest {
     string id = 1;
     CodeType type = 2;
-
-    message Github {
-        string auth_token = 1;
-        string full_repo = 2;
-        string issue_number = 3;
-    }
+    Github github = 3;
 }
 
 message CodeResponse {
@@ -45,3 +46,5 @@ message CodeDecision {
     CodeDecisionType decison = 2;
     string body = 3;
 }
+
+

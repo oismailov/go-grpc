@@ -38,7 +38,21 @@ func getCmdCodeNew() *cobra.Command {
 		Short: "Create new coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
+			github := &pb.Github{AuthToken: githubAuthToken, FullRepo: githubRepo}
 
+			codeTypeValue, ok := pb.CodeType_value[codeType]
+
+			if !ok {
+				log.Fatalf("invalid enum value: %s", codeType)
+			}
+
+			response, err := codeWorkflowClient.New(context.Background(), &pb.CodeRequest{Type: pb.CodeType(codeTypeValue), Github: github})
+
+			if err != nil {
+				log.Fatalf("Could not get response from server: %s", err)
+			}
+
+			fmt.Printf("%v", lib.ConvertStructToJson(response))
 		},
 	}
 
@@ -69,7 +83,19 @@ func getCmdCodeInit() *cobra.Command {
 		Short: "Init coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
+			codeTypeValue, ok := pb.CodeType_value[codeType]
 
+			if !ok {
+				log.Fatalf("invalid enum value: %s", codeType)
+			}
+
+			response, err := codeWorkflowClient.Init(context.Background(), &pb.CodeRequest{Type: pb.CodeType(codeTypeValue)})
+
+			if err != nil {
+				log.Fatalf("Could not get response from server: %s", err)
+			}
+
+			fmt.Printf("%v", lib.ConvertStructToJson(response))
 		},
 	}
 
