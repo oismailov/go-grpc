@@ -75,9 +75,7 @@ func geCmdDataGet() *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&id, "id", "", "Id of data that will be shown.")
-	err := cmd.MarkFlagRequired("id")
-
-	if err != nil {
+	if err := cmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("Could not mark flag `id` as required: %s", err)
 	}
 

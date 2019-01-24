@@ -43,20 +43,17 @@ func getCmdCodeNew() *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&githubAuthToken, "github-auth-token", "", "github auth token.")
-	err := cmd.MarkFlagRequired("github-auth-token")
-	if err != nil {
+	if err := cmd.MarkFlagRequired("github-auth-token"); err != nil {
 		log.Fatalf("Could not mark flag `github-auth-token` as required: %s", err)
 	}
 
 	cmd.Flags().StringVar(&githubRepo, "github-repo", "", "github repo.")
-	err = cmd.MarkFlagRequired("github-repo")
-	if err != nil {
+	if err := cmd.MarkFlagRequired("github-repo"); err != nil {
 		log.Fatalf("Could not mark flag `github-repo` as required: %s", err)
 	}
 
 	cmd.Flags().StringVar(&codeType, "code-type", "", "github code type.")
-	err = cmd.MarkFlagRequired("code-type")
-	if err != nil {
+	if err := cmd.MarkFlagRequired("code-type"); err != nil {
 		log.Fatalf("Could not mark flag `code-type` as required: %s", err)
 	}
 
@@ -77,14 +74,12 @@ func getCmdCodeInit() *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&codeType, "code-type", "", "github code type.")
-	err := cmd.MarkFlagRequired("code-type")
-	if err != nil {
+	if err := cmd.MarkFlagRequired("code-type"); err != nil {
 		log.Fatalf("Could not mark flag `code-type` as required: %s", err)
 	}
 
 	cmd.Flags().StringVar(&name, "name", "", "name.")
-	err = cmd.MarkFlagRequired("name")
-	if err != nil {
+	if err := cmd.MarkFlagRequired("name"); err != nil {
 		log.Fatalf("Could not mark flag `name` as required: %s", err)
 	}
 
@@ -111,8 +106,7 @@ func geCmdCodeGet() *cobra.Command {
 
 	cmd.Flags().StringVar(&id, "id", "", "Id of code that shown")
 
-	err := cmd.MarkFlagRequired("id")
-	if err != nil {
+	if err := cmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("Could not mark flag `id` as required: %s", err)
 	}
 
@@ -132,8 +126,7 @@ func getCmdCodeApprove() *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&id, "id", "", "Id of code that will be approved")
-	err := cmd.MarkFlagRequired("id")
-	if err != nil {
+	if err := cmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("Could not mark flag `id` as required: %s", err)
 	}
 

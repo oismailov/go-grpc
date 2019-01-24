@@ -80,8 +80,7 @@ func geCmdContentGet() *cobra.Command {
 
 	cmd.Flags().StringVar(&id, "id", "", "Id of content that will be shown.")
 
-	err := cmd.MarkFlagRequired("id")
-	if err != nil {
+	if err := cmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("Could not mark flag `id` as required: %s", err)
 	}
 
@@ -102,14 +101,12 @@ func getCmdContentNew() *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&contentType, "type", "", "content type.")
-	err := cmd.MarkFlagRequired("type")
-	if err != nil {
+	if err := cmd.MarkFlagRequired("type"); err != nil {
 		log.Fatalf("Could not mark flag `type` as required: %s", err)
 	}
 
 	cmd.Flags().StringVar(&file, "file", "", "file name.")
-	err = cmd.MarkFlagRequired("file")
-	if err != nil {
+	if err := cmd.MarkFlagRequired("file"); err != nil {
 		log.Fatalf("Could not mark flag `file` as required: %s", err)
 	}
 
@@ -130,14 +127,12 @@ func getCmdContentInit() *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&contentType, "content-type", "", "content type.")
-	err := cmd.MarkFlagRequired("content-type")
-	if err != nil {
+	if err := cmd.MarkFlagRequired("content-type"); err != nil {
 		log.Fatalf("Could not mark flag `content-type` as required: %s", err)
 	}
 
 	cmd.Flags().StringVar(&name, "name", "", "content name")
-	err = cmd.MarkFlagRequired("name")
-	if err != nil {
+	if err := cmd.MarkFlagRequired("name"); err != nil {
 		log.Fatalf("Could not mark flag `name` as required: %s", err)
 	}
 
