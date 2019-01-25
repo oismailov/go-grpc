@@ -21,20 +21,28 @@ enum StreamSource {
 enum DataType {
   Collect = 0;
   Clean = 1;
+  CollectContactInfo = 2;
 }
 
 message DataRequest {
   string id = 1;
+
   DataType type = 2;
+
+  string title = 3;
+  string instructions = 4;
+  string instructionVideo = 5;
+  map<string, string> secrets = 6;
 }
 
 message DataResponse {
-  string message = 1;
+  string id = 1;
+
+  repeated Field fields = 3;
 }
 
 message DataRecord {
   string id = 1;
-  string identifier = 2;
   string status = 3;
   repeated Field fields = 4;
 }
