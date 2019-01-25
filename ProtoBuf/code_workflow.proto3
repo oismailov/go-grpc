@@ -19,7 +19,7 @@ enum CodeType {
 }
 
 message CodeRequest {
-    string id = 1;
+    int64 id = 1;
     CodeType type = 2;
 
     message Github {
@@ -30,7 +30,7 @@ message CodeRequest {
 }
 
 message CodeResponse {
-    string id = 1;
+    int64 id = 1;
     string status = 3;
 
     message Github{
@@ -44,7 +44,7 @@ enum CodeDecisionType {
 }
 
 message CodeDecision {
-    string id = 1;
+    int64 id = 1;
     CodeDecisionType decison = 2;
     string body = 3;
 }
