@@ -25,7 +25,7 @@ enum DataType {
 }
 
 message DataRequest {
-  string id = 1;
+  int64 id = 1;
 
   DataType type = 2;
 
@@ -36,13 +36,13 @@ message DataRequest {
 }
 
 message DataResponse {
-  string id = 1;
+  int64 id = 1;
 
   repeated Field fields = 3;
 }
 
 message DataRecord {
-  string id = 1;
+  int64 id = 1;
   string status = 3;
   repeated Field fields = 4;
 }

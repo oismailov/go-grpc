@@ -13,13 +13,13 @@ enum ContentType {
 }
 
 message ContentRequest {
-  string id = 1;
+  int64 id = 1;
   string name = 2;
   ContentType type = 3;
 }
 
 message ContentResponse {
-  string id = 1;
+  int64 id = 1;
   string content = 2;
   string content_url = 3;
 }
