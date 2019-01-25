@@ -19,5 +19,7 @@ message ContentRequest {
 }
 
 message ContentResponse {
-  string message = 1;
+  string id = 1;
+  string content = 2;
+  string content_url = 3;
 }
