@@ -25,6 +25,7 @@ func getCmdCode() *cobra.Command {
 	cmd.AddCommand(getCmdCodeList())
 	cmd.AddCommand(getCmdCodeApprove())
 	cmd.AddCommand(getCmdCodeTypeList())
+	cmd.AddCommand(getCmdCodeReject())
 
 	return cmd
 }
@@ -158,11 +159,49 @@ func getCmdCodeApprove() *cobra.Command {
 		Short: "Approve coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
+			response, err := codeWorkflowClient.Decide(context.Background(), &pb.CodeDecision{
+				Id:      lib.ConvertStringToInt64(id),
+				Decison: pb.CodeDecisionType_APPROVE,
+			})
 
+			if err != nil {
+				log.Fatalf("Could not get response from server: %s", err)
+			}
+
+			fmt.Printf("%v", lib.ConvertStructToJson(response))
 		},
 	}
 
 	cmd.Flags().StringVar(&id, "id", "", "Id of code that will be approved")
+	if err := cmd.MarkFlagRequired("id"); err != nil {
+		log.Fatalf("Could not mark flag `id` as required: %s", err)
+	}
+
+	return cmd
+}
+
+func getCmdCodeReject() *cobra.Command {
+	var id string
+
+	cmd := &cobra.Command{
+		Use:   "reject [options]",
+		Short: "Reject coding task.",
+		Long:  "",
+		Run: func(cmd *cobra.Command, args []string) {
+			response, err := codeWorkflowClient.Decide(context.Background(), &pb.CodeDecision{
+				Id:      lib.ConvertStringToInt64(id),
+				Decison: pb.CodeDecisionType_REJECT,
+			})
+
+			if err != nil {
+				log.Fatalf("Could not get response from server: %s", err)
+			}
+
+			fmt.Printf("%v", lib.ConvertStructToJson(response))
+		},
+	}
+
+	cmd.Flags().StringVar(&id, "id", "", "Id of code that will be rejected")
 	if err := cmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("Could not mark flag `id` as required: %s", err)
 	}
