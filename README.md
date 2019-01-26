@@ -1,6 +1,6 @@
-LandingCrew CLI
+# LandingCrew CLI
 
-LandingCrew CLI allows quick access to a workforce for various tasks.
+LandingCrew CLI allows you to access a workforce from the command line.
 
 # Usage
 
