@@ -3,8 +3,8 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"github.com/abhiyerra/landingcrew-cli/landingcrew/lib"
-	pb "github.com/abhiyerra/landingcrew-cli/landingcrew/workflow"
+	"github.com/abhiyerra/landingcrew-cli/lib"
+	pb "github.com/abhiyerra/landingcrew-cli/workflow"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/spf13/cobra"
 	"io"
@@ -64,7 +64,7 @@ func geCmdActionGet() *cobra.Command {
 		Short: "Show single action.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			response, err := actionWorkflowClient.Get(context.Background(), &pb.ActionRequest{Id: id})
+			response, err := actionWorkflowClient.Get(context.Background(), &pb.ActionRequest{Id: lib.ConvertStringToInt64(id)})
 
 			if err != nil {
 				log.Fatalf("Could not get response from server: %s", err)
@@ -83,10 +83,11 @@ func geCmdActionGet() *cobra.Command {
 }
 
 func getCmdActionNew() *cobra.Command {
-	var title string
-	var instructions string
-	var instructionVideo string
-	var identifier string
+	var (
+		title            string
+		instructions     string
+		instructionVideo string
+	)
 
 	cmd := &cobra.Command{
 		Use:   "new [options]",
@@ -99,7 +100,6 @@ func getCmdActionNew() *cobra.Command {
 					Title:            title,
 					Instructions:     instructions,
 					InstructionVideo: instructionVideo,
-					Identifier:       identifier,
 				})
 
 			if err != nil {
@@ -124,8 +124,6 @@ func getCmdActionNew() *cobra.Command {
 	if err := cmd.MarkFlagRequired("instruction-video"); err != nil {
 		log.Fatalf("Could not mark flag `instruction-video` as required: %s", err)
 	}
-
-	cmd.Flags().StringVar(&identifier, "identifier", "", "")
 
 	return cmd
 }

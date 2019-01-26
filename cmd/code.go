@@ -3,8 +3,8 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"github.com/abhiyerra/landingcrew-cli/landingcrew/lib"
-	pb "github.com/abhiyerra/landingcrew-cli/landingcrew/workflow"
+	"github.com/abhiyerra/landingcrew-cli/lib"
+	pb "github.com/abhiyerra/landingcrew-cli/workflow"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/spf13/cobra"
 	"io"
@@ -53,7 +53,7 @@ func getCmdCodeNew() *cobra.Command {
 		Short: "Create new coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			github := &pb.Github{AuthToken: githubAuthToken, FullRepo: githubRepo}
+			//github := &pb.CodeRequest_Github{AuthToken: githubAuthToken, FullRepo: githubRepo}
 
 			codeTypeValue, ok := pb.CodeType_value[codeType]
 
@@ -61,7 +61,9 @@ func getCmdCodeNew() *cobra.Command {
 				log.Fatalf("invalid enum value: %s", codeType)
 			}
 
-			response, err := codeWorkflowClient.New(context.Background(), &pb.CodeRequest{Type: pb.CodeType(codeTypeValue), Github: github})
+			response, err := codeWorkflowClient.New(context.Background(), &pb.CodeRequest{
+				Type: pb.CodeType(codeTypeValue),
+			})
 
 			if err != nil {
 				log.Fatalf("Could not get response from server: %s", err)
@@ -98,19 +100,13 @@ func getCmdCodeInit() *cobra.Command {
 		Short: "Init coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			codeTypeValue, ok := pb.CodeType_value[codeType]
+			//codeTypeValue, ok := pb.CodeType_value[codeType]
 
-			if !ok {
-				log.Fatalf("invalid enum value: %s", codeType)
-			}
+			//if !ok {
+			//	log.Fatalf("invalid enum value: %s", codeType)
+			//}
 
-			response, err := codeWorkflowClient.Init(context.Background(), &pb.CodeRequest{Type: pb.CodeType(codeTypeValue)})
-
-			if err != nil {
-				log.Fatalf("Could not get response from server: %s", err)
-			}
-
-			fmt.Printf("%v", lib.ConvertStructToJson(response))
+			//fmt.Printf("%v", lib.ConvertStructToJson(response))
 		},
 	}
 
@@ -135,7 +131,7 @@ func geCmdCodeGet() *cobra.Command {
 		Short: "Show single coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			response, err := codeWorkflowClient.Get(context.Background(), &pb.CodeRequest{Id: id})
+			response, err := codeWorkflowClient.Get(context.Background(), &pb.CodeRequest{Id: lib.ConvertStringToInt64(id)})
 
 			if err != nil {
 				log.Fatalf("Could not get response from server: %s", err)
