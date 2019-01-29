@@ -12,6 +12,7 @@ import (
 	"os"
 )
 
+const CODE_TEMPLATE_PATH = "https://assets.landingcrew.com/templates/{CODE_TYPE}/.zip"
 func getCmdCode() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "code",
@@ -54,8 +55,6 @@ func getCmdCodeNew() *cobra.Command {
 		Short: "Create new coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			//github := &pb.CodeRequest_Github{AuthToken: githubAuthToken, FullRepo: githubRepo}
-
 			codeTypeValue, ok := pb.CodeType_value[codeType]
 
 			if !ok {
@@ -63,6 +62,10 @@ func getCmdCodeNew() *cobra.Command {
 			}
 
 			response, err := codeWorkflowClient.New(context.Background(), &pb.CodeRequest{
+				Github: &pb.Github{
+					AuthToken: githubAuthToken,
+					FullRepo:  githubRepo,
+				},
 				Type: pb.CodeType(codeTypeValue),
 			})
 
@@ -95,19 +98,18 @@ func getCmdCodeNew() *cobra.Command {
 func getCmdCodeInit() *cobra.Command {
 	var codeType string
 	var name string
+	var path string
 
 	cmd := &cobra.Command{
 		Use:   "init [options]",
 		Short: "Init coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			//codeTypeValue, ok := pb.CodeType_value[codeType]
-
-			//if !ok {
-			//	log.Fatalf("invalid enum value: %s", codeType)
-			//}
-
-			//fmt.Printf("%v", lib.ConvertStructToJson(response))
+			err := lib.DownloadFile(path, CODE_TEMPLATE_PATH)
+			if err != nil {
+				fmt.Printf("%v\n", lib.ConvertStructToJson(
+					map[string]string{"message": fmt.Sprintf("Could not download file: %s", err)}))
+			}
 		},
 	}
 
@@ -119,6 +121,11 @@ func getCmdCodeInit() *cobra.Command {
 	cmd.Flags().StringVar(&name, "name", "", "name.")
 	if err := cmd.MarkFlagRequired("name"); err != nil {
 		log.Fatalf("Could not mark flag `name` as required: %s", err)
+	}
+
+	cmd.Flags().StringVar(&path, "path", "", "path.")
+	if err := cmd.MarkFlagRequired("path"); err != nil {
+		log.Fatalf("Could not mark flag `path` as required: %s", err)
 	}
 
 	return cmd
