@@ -1,9 +1,0 @@
-{
-    "ID": "Identifier",
-    "Fields": [{
-        "Name": "Name",
-        "Value": "Value"
-    }],
-    "Environment": {},
-    "Status": "done"
-}
