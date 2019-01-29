@@ -47,7 +47,7 @@ func (x StreamSource) String() string {
 	return proto.EnumName(StreamSource_name, int32(x))
 }
 func (StreamSource) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_data_workflow_631a37a5c3b2f60c, []int{0}
+	return fileDescriptor_data_workflow_a5435ca8839226cd, []int{0}
 }
 
 type DataType int32
@@ -73,7 +73,7 @@ func (x DataType) String() string {
 	return proto.EnumName(DataType_name, int32(x))
 }
 func (DataType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_data_workflow_631a37a5c3b2f60c, []int{1}
+	return fileDescriptor_data_workflow_a5435ca8839226cd, []int{1}
 }
 
 type DataRequest struct {
@@ -92,7 +92,7 @@ func (m *DataRequest) Reset()         { *m = DataRequest{} }
 func (m *DataRequest) String() string { return proto.CompactTextString(m) }
 func (*DataRequest) ProtoMessage()    {}
 func (*DataRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_data_workflow_631a37a5c3b2f60c, []int{0}
+	return fileDescriptor_data_workflow_a5435ca8839226cd, []int{0}
 }
 func (m *DataRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DataRequest.Unmarshal(m, b)
@@ -156,7 +156,7 @@ func (m *DataRequest) GetSecrets() map[string]string {
 
 type DataResponse struct {
 	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Fields               []*Field `protobuf:"bytes,3,rep,name=fields,proto3" json:"fields,omitempty"`
+	Fields               []*Field `protobuf:"bytes,2,rep,name=fields,proto3" json:"fields,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -166,7 +166,7 @@ func (m *DataResponse) Reset()         { *m = DataResponse{} }
 func (m *DataResponse) String() string { return proto.CompactTextString(m) }
 func (*DataResponse) ProtoMessage()    {}
 func (*DataResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_data_workflow_631a37a5c3b2f60c, []int{1}
+	return fileDescriptor_data_workflow_a5435ca8839226cd, []int{1}
 }
 func (m *DataResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DataResponse.Unmarshal(m, b)
@@ -213,7 +213,7 @@ func (m *DataRecord) Reset()         { *m = DataRecord{} }
 func (m *DataRecord) String() string { return proto.CompactTextString(m) }
 func (*DataRecord) ProtoMessage()    {}
 func (*DataRecord) Descriptor() ([]byte, []int) {
-	return fileDescriptor_data_workflow_631a37a5c3b2f60c, []int{2}
+	return fileDescriptor_data_workflow_a5435ca8839226cd, []int{2}
 }
 func (m *DataRecord) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DataRecord.Unmarshal(m, b)
@@ -462,9 +462,9 @@ var _DataWorkflow_serviceDesc = grpc.ServiceDesc{
 	Metadata: "data_workflow.proto3",
 }
 
-func init() { proto.RegisterFile("data_workflow.proto3", fileDescriptor_data_workflow_631a37a5c3b2f60c) }
+func init() { proto.RegisterFile("data_workflow.proto3", fileDescriptor_data_workflow_a5435ca8839226cd) }
 
-var fileDescriptor_data_workflow_631a37a5c3b2f60c = []byte{
+var fileDescriptor_data_workflow_a5435ca8839226cd = []byte{
 	// 459 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x52, 0xdd, 0x8a, 0xd3, 0x40,
 	0x14, 0x6e, 0x92, 0xfe, 0x6c, 0x4e, 0xd3, 0x25, 0x0c, 0x4b, 0x89, 0x15, 0xa5, 0x04, 0x2f, 0x4a,
@@ -483,7 +483,7 @@ var fileDescriptor_data_workflow_631a37a5c3b2f60c = []byte{
 	0x55, 0x74, 0x72, 0xce, 0xd6, 0xe0, 0x75, 0x05, 0xe6, 0x83, 0xf3, 0x80, 0x55, 0x73, 0x35, 0x37,
 	0xaa, 0x3f, 0xeb, 0xe5, 0x7f, 0x88, 0xb4, 0x34, 0x97, 0x73, 0x23, 0x03, 0xd6, 0xf6, 0x1b, 0x2b,
 	0x7c, 0x0b, 0x9e, 0xf9, 0x81, 0xce, 0x55, 0xa6, 0xf1, 0x2c, 0x95, 0xe7, 0x30, 0x34, 0x31, 0x06,
-	0x4e, 0xb3, 0xcf, 0x90, 0x7f, 0xa8, 0x61, 0xd4, 0xb2, 0xe1, 0x1d, 0x80, 0x99, 0x8f, 0x55, 0x91,
+	0x76, 0xb3, 0xcf, 0x90, 0x7f, 0xa8, 0x61, 0xd4, 0xb2, 0xe1, 0x1d, 0x80, 0x99, 0x8f, 0x55, 0x91,
 	0x9c, 0x4d, 0x4f, 0x61, 0xa8, 0x49, 0x50, 0xa9, 0xdb, 0xd4, 0x5a, 0xd4, 0x39, 0xb5, 0xff, 0xaf,
 	0x53, 0x97, 0xaf, 0xc1, 0xdb, 0x52, 0x81, 0xe2, 0x71, 0xab, 0xca, 0x22, 0x46, 0x36, 0x02, 0x67,
 	0xb3, 0xbd, 0xf7, 0x7b, 0x6c, 0x02, 0xae, 0x11, 0x64, 0x76, 0xf0, 0x2d, 0xe6, 0xc1, 0xc5, 0x3b,
@@ -494,5 +494,5 @@ var fileDescriptor_data_workflow_631a37a5c3b2f60c = []byte{
 	0xec, 0xd5, 0xae, 0x8f, 0x48, 0xff, 0x73, 0xbd, 0x82, 0xfe, 0x67, 0xa9, 0x89, 0x4d, 0xb9, 0xe9,
 	0x2b, 0x3f, 0xf5, 0x95, 0xdf, 0xd6, 0x7d, 0x3d, 0x1b, 0x78, 0x69, 0xb1, 0x10, 0xfa, 0xdb, 0x2a,
 	0x8b, 0xd9, 0x98, 0xff, 0x89, 0x77, 0xd6, 0x05, 0x61, 0x6f, 0x37, 0x34, 0xcd, 0xfe, 0x1d, 0x00,
-	0x00, 0xff, 0xff, 0x77, 0xf8, 0x86, 0xf0, 0x1c, 0x03, 0x00, 0x00,
+	0x00, 0xff, 0xff, 0x4b, 0x5d, 0x61, 0x6c, 0x1c, 0x03, 0x00, 0x00,
 }
