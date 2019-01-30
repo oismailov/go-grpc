@@ -9,10 +9,15 @@ import (
 	"github.com/spf13/cobra"
 	"io"
 	"log"
+	"math/rand"
 	"os"
+	"strconv"
+	"strings"
+	"time"
 )
 
-const CODE_TEMPLATE_PATH = "https://assets.landingcrew.com/templates/{CODE_TYPE}/.zip"
+const CODE_TEMPLATE_PATH = "https://assets.landingcrew.com/templates/{CODE_TYPE}.zip"
+
 func getCmdCode() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "code",
@@ -96,20 +101,42 @@ func getCmdCodeNew() *cobra.Command {
 }
 
 func getCmdCodeInit() *cobra.Command {
-	var codeType string
-	var name string
-	var path string
+	var (
+		codeType            string
+		name                string
+		path                string
+		tmpDownloadFilePath string
+	)
 
 	cmd := &cobra.Command{
 		Use:   "init [options]",
 		Short: "Init coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			err := lib.DownloadFile(path, CODE_TEMPLATE_PATH)
-			if err != nil {
-				fmt.Printf("%v\n", lib.ConvertStructToJson(
-					map[string]string{"message": fmt.Sprintf("Could not download file: %s", err)}))
+			/*
+				Create tmp zip file `tmpDownloadFilePath`.
+				Download archive from `https://assets.landingcrew.com/templates/{CODE_TYPE}/.zip` to that file.
+				Unzip `tmpDownloadFilePath` to `path`
+				Replace  {{Name .}} with name for each file.
+			*/
+			tmpDownloadFilePath = strconv.Itoa(time.Now().Nanosecond()*rand.Int()) + ".zip"
+
+			downloadFilePath := strings.Replace(CODE_TEMPLATE_PATH, "{CODE_TYPE}", codeType, -1)
+
+			if err := lib.DownloadFile(tmpDownloadFilePath, downloadFilePath); err != nil {
+				log.Fatalf("Could not download file %s: %s", downloadFilePath, err)
 			}
+
+			files, err := lib.Unzip(tmpDownloadFilePath, path)
+			if err != nil {
+				log.Fatalf("Could not unzip archive: %s", err)
+			}
+
+			if err := os.Remove(tmpDownloadFilePath); err != nil {
+				log.Fatalf("Could not remove tmp file %s : %s", tmpDownloadFilePath, err)
+			}
+
+			lib.FindReplaceText(files, name)
 		},
 	}
 
