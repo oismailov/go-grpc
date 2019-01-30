@@ -6,7 +6,7 @@ import (
 	"google.golang.org/grpc"
 	"os"
 
-	pb "github.com/abhiyerra/landingcrew-cli/landingcrew/workflow"
+	pb "github.com/abhiyerra/landingcrew-cli/workflow"
 )
 
 // rootCmd represents the base command when called without any subcommands

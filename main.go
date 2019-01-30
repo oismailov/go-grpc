@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/abhiyerra/landingcrew-cli/landingcrew/cmd"
+	"github.com/abhiyerra/landingcrew-cli/cmd"
 	"google.golang.org/grpc"
 	"log"
 )

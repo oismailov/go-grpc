@@ -3,14 +3,17 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"github.com/abhiyerra/landingcrew-cli/landingcrew/lib"
-	pb "github.com/abhiyerra/landingcrew-cli/landingcrew/workflow"
+	"github.com/abhiyerra/landingcrew-cli/lib"
+	pb "github.com/abhiyerra/landingcrew-cli/workflow"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/spf13/cobra"
 	"io"
+	"io/ioutil"
 	"log"
 	"os"
 )
+
+const CODE_TEMPLATE_PATH = "https://assets.landingcrew.com/templates/%s.zip"
 
 func getCmdCode() *cobra.Command {
 	cmd := &cobra.Command{
@@ -24,21 +27,57 @@ func getCmdCode() *cobra.Command {
 	cmd.AddCommand(geCmdCodeGet())
 	cmd.AddCommand(getCmdCodeList())
 	cmd.AddCommand(getCmdCodeApprove())
+	cmd.AddCommand(getCmdCodeTypeList())
+	cmd.AddCommand(getCmdCodeReject())
+
+	return cmd
+}
+
+func getCmdCodeTypeList() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "type-list [options]",
+		Short: "Output list of types.",
+		Long:  "",
+		Run: func(cmd *cobra.Command, args []string) {
+
+			fmt.Printf("%v", lib.ConvertStructToJson(pb.CodeType_value))
+		},
+	}
 
 	return cmd
 }
 
 func getCmdCodeNew() *cobra.Command {
-	var githubAuthToken string
-	var githubRepo string
-	var codeType string
+	var (
+		githubAuthToken string
+		githubRepo      string
+		codeType        string
+	)
 
 	cmd := &cobra.Command{
 		Use:   "new [options]",
 		Short: "Create new coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
+			codeTypeValue, ok := pb.CodeType_value[codeType]
 
+			if !ok {
+				log.Fatalf("invalid enum value: %s", codeType)
+			}
+
+			response, err := codeWorkflowClient.New(context.Background(), &pb.CodeRequest{
+				Github: &pb.Github{
+					AuthToken: githubAuthToken,
+					FullRepo:  githubRepo,
+				},
+				Type: pb.CodeType(codeTypeValue),
+			})
+
+			if err != nil {
+				log.Fatalf("Could not get response from server: %s", err)
+			}
+
+			fmt.Printf("%v", lib.ConvertStructToJson(response))
 		},
 	}
 
@@ -61,15 +100,48 @@ func getCmdCodeNew() *cobra.Command {
 }
 
 func getCmdCodeInit() *cobra.Command {
-	var codeType string
-	var name string
+	var (
+		codeType string
+		name     string
+		path     string
+	)
 
 	cmd := &cobra.Command{
 		Use:   "init [options]",
 		Short: "Init coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
+			/*
+				Create tmp zip file `tmpDownloadFilePath`.
+				Download archive from `https://assets.landingcrew.com/templates/{CODE_TYPE}/.zip` to that file.
+				Unzip `tmpDownloadFilePath` to `path`
+				Replace  {{Name .}} with name for each file.
+			*/
 
+			tmpFile, err := ioutil.TempFile("", codeType+"*"+".zip")
+
+			if err != nil {
+				log.Fatalf("Could not create tmp file: %s", err)
+			}
+
+			defer os.Remove(tmpFile.Name())
+
+			downloadFilePath := fmt.Sprintf(CODE_TEMPLATE_PATH, codeType)
+
+			if err := lib.DownloadFile(tmpFile, downloadFilePath); err != nil {
+				log.Fatalf("Could not download file %s: %s", downloadFilePath, err)
+			}
+
+			files, err := lib.Unzip(tmpFile, path)
+			if err != nil {
+				log.Fatalf("Could not unzip archive: %s", err)
+			}
+
+			if err := tmpFile.Close(); err != nil {
+				log.Fatalf("Could not close file: %s", err)
+			}
+
+			lib.FindReplaceText(files, map[string]interface{}{"Name": name})
 		},
 	}
 
@@ -83,6 +155,11 @@ func getCmdCodeInit() *cobra.Command {
 		log.Fatalf("Could not mark flag `name` as required: %s", err)
 	}
 
+	cmd.Flags().StringVar(&path, "path", "", "path.")
+	if err := cmd.MarkFlagRequired("path"); err != nil {
+		log.Fatalf("Could not mark flag `path` as required: %s", err)
+	}
+
 	return cmd
 }
 
@@ -94,7 +171,7 @@ func geCmdCodeGet() *cobra.Command {
 		Short: "Show single coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			response, err := codeWorkflowClient.Get(context.Background(), &pb.CodeRequest{Id: id})
+			response, err := codeWorkflowClient.Get(context.Background(), &pb.CodeRequest{Id: lib.ConvertStringToInt64(id)})
 
 			if err != nil {
 				log.Fatalf("Could not get response from server: %s", err)
@@ -121,11 +198,49 @@ func getCmdCodeApprove() *cobra.Command {
 		Short: "Approve coding task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
+			response, err := codeWorkflowClient.Decide(context.Background(), &pb.CodeDecision{
+				Id:      lib.ConvertStringToInt64(id),
+				Decison: pb.CodeDecisionType_APPROVE,
+			})
 
+			if err != nil {
+				log.Fatalf("Could not get response from server: %s", err)
+			}
+
+			fmt.Printf("%v", lib.ConvertStructToJson(response))
 		},
 	}
 
 	cmd.Flags().StringVar(&id, "id", "", "Id of code that will be approved")
+	if err := cmd.MarkFlagRequired("id"); err != nil {
+		log.Fatalf("Could not mark flag `id` as required: %s", err)
+	}
+
+	return cmd
+}
+
+func getCmdCodeReject() *cobra.Command {
+	var id string
+
+	cmd := &cobra.Command{
+		Use:   "reject [options]",
+		Short: "Reject coding task.",
+		Long:  "",
+		Run: func(cmd *cobra.Command, args []string) {
+			response, err := codeWorkflowClient.Decide(context.Background(), &pb.CodeDecision{
+				Id:      lib.ConvertStringToInt64(id),
+				Decison: pb.CodeDecisionType_REJECT,
+			})
+
+			if err != nil {
+				log.Fatalf("Could not get response from server: %s", err)
+			}
+
+			fmt.Printf("%v", lib.ConvertStructToJson(response))
+		},
+	}
+
+	cmd.Flags().StringVar(&id, "id", "", "Id of code that will be rejected")
 	if err := cmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("Could not mark flag `id` as required: %s", err)
 	}

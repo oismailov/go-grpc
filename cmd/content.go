@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/abhiyerra/landingcrew-cli/landingcrew/lib"
-	pb "github.com/abhiyerra/landingcrew-cli/landingcrew/workflow"
+	"github.com/abhiyerra/landingcrew-cli/lib"
+	pb "github.com/abhiyerra/landingcrew-cli/workflow"
 	"github.com/golang/protobuf/ptypes/empty"
 	"io"
 	"log"
@@ -68,7 +68,7 @@ func geCmdContentGet() *cobra.Command {
 		Short: "Show single content task.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			response, err := contentWorkflowClient.Get(context.Background(), &pb.ContentRequest{Id: id})
+			response, err := contentWorkflowClient.Get(context.Background(), &pb.ContentRequest{Id: lib.ConvertStringToInt64(id)})
 
 			if err != nil {
 				log.Fatalf("Could not get response from server: %s", err)
@@ -145,7 +145,7 @@ func getCmdContentTypeList() *cobra.Command {
 		Short: "List content type",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-
+			fmt.Printf("%v", lib.ConvertStructToJson(pb.ContentType_value))
 		},
 	}
 
