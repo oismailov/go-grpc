@@ -10,10 +10,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
-	"math/rand"
 	"os"
-	"strconv"
-	"time"
 )
 
 const CODE_TEMPLATE_PATH = "https://assets.landingcrew.com/templates/%s.zip"
@@ -121,7 +118,8 @@ func getCmdCodeInit() *cobra.Command {
 				Replace  {{Name .}} with name for each file.
 			*/
 
-			tmpFile, err := ioutil.TempFile("", strconv.Itoa(time.Now().Nanosecond()*rand.Int())+".zip")
+			tmpFile, err := ioutil.TempFile("", codeType+"*"+".zip")
+
 			if err != nil {
 				log.Fatalf("Could not create tmp file: %s", err)
 			}
