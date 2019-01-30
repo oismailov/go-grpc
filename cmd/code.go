@@ -51,9 +51,11 @@ func getCmdCodeTypeList() *cobra.Command {
 }
 
 func getCmdCodeNew() *cobra.Command {
-	var githubAuthToken string
-	var githubRepo string
-	var codeType string
+	var (
+		githubAuthToken string
+		githubRepo      string
+		codeType        string
+	)
 
 	cmd := &cobra.Command{
 		Use:   "new [options]",
