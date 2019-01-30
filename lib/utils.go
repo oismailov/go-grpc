@@ -36,7 +36,7 @@ func ConvertStringToInt64(s string) int64 {
 }
 
 //DownloadDFile will download file from remote server.
-func DownloadFile(filepath string, url string) error {
+func DownloadFile(tmpFile *os.File, url string) error {
 	// Get the data
 	resp, err := http.Get(url)
 	if err != nil {
@@ -49,15 +49,8 @@ func DownloadFile(filepath string, url string) error {
 		return fmt.Errorf("bad status: %s", resp.Status)
 	}
 
-	// Create the file
-	out, err := os.Create(filepath)
-	if err != nil {
-		return err
-	}
-	defer out.Close()
-
 	// Write the body to file
-	_, err = io.Copy(out, resp.Body)
+	_, err = io.Copy(tmpFile, resp.Body)
 	if err != nil {
 		return err
 	}
@@ -65,11 +58,11 @@ func DownloadFile(filepath string, url string) error {
 	return nil
 }
 
-func Unzip(src string, dest string) ([]string, error) {
+func Unzip(src *os.File, dest string) ([]string, error) {
 
 	var filenames []string
 
-	r, err := zip.OpenReader(src)
+	r, err := zip.OpenReader(src.Name())
 	if err != nil {
 		return filenames, err
 	}
@@ -121,7 +114,7 @@ func Unzip(src string, dest string) ([]string, error) {
 	return filenames, nil
 }
 
-func FindReplaceText(files []string, replace string) {
+func FindReplaceText(files []string, replace map[string]interface{}) {
 	for _, file := range files {
 		funcMap := template.FuncMap{
 			"Name": strings.Title,
@@ -154,9 +147,12 @@ func FindReplaceText(files []string, replace string) {
 			log.Fatalf("Could not create file: %s", err)
 		}
 
-		err = tmpl.Execute(f, replace)
-		if err != nil {
-			log.Fatalf("Could not replace text: %s", err)
+		for _, item := range replace {
+			err = tmpl.Execute(f, item)
+			if err != nil {
+				log.Fatalf("Could not replace text: %s", err)
+			}
 		}
+
 	}
 }

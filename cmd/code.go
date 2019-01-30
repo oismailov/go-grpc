@@ -8,15 +8,15 @@ import (
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/spf13/cobra"
 	"io"
+	"io/ioutil"
 	"log"
 	"math/rand"
 	"os"
 	"strconv"
-	"strings"
 	"time"
 )
 
-const CODE_TEMPLATE_PATH = "https://assets.landingcrew.com/templates/{CODE_TYPE}.zip"
+const CODE_TEMPLATE_PATH = "https://assets.landingcrew.com/templates/%s.zip"
 
 func getCmdCode() *cobra.Command {
 	cmd := &cobra.Command{
@@ -104,10 +104,9 @@ func getCmdCodeNew() *cobra.Command {
 
 func getCmdCodeInit() *cobra.Command {
 	var (
-		codeType            string
-		name                string
-		path                string
-		tmpDownloadFilePath string
+		codeType string
+		name     string
+		path     string
 	)
 
 	cmd := &cobra.Command{
@@ -121,24 +120,30 @@ func getCmdCodeInit() *cobra.Command {
 				Unzip `tmpDownloadFilePath` to `path`
 				Replace  {{Name .}} with name for each file.
 			*/
-			tmpDownloadFilePath = strconv.Itoa(time.Now().Nanosecond()*rand.Int()) + ".zip"
 
-			downloadFilePath := strings.Replace(CODE_TEMPLATE_PATH, "{CODE_TYPE}", codeType, -1)
+			tmpFile, err := ioutil.TempFile("", strconv.Itoa(time.Now().Nanosecond()*rand.Int())+".zip")
+			if err != nil {
+				log.Fatalf("Could not create tmp file: %s", err)
+			}
 
-			if err := lib.DownloadFile(tmpDownloadFilePath, downloadFilePath); err != nil {
+			defer os.Remove(tmpFile.Name())
+
+			downloadFilePath := fmt.Sprintf(CODE_TEMPLATE_PATH, codeType)
+
+			if err := lib.DownloadFile(tmpFile, downloadFilePath); err != nil {
 				log.Fatalf("Could not download file %s: %s", downloadFilePath, err)
 			}
 
-			files, err := lib.Unzip(tmpDownloadFilePath, path)
+			files, err := lib.Unzip(tmpFile, path)
 			if err != nil {
 				log.Fatalf("Could not unzip archive: %s", err)
 			}
 
-			if err := os.Remove(tmpDownloadFilePath); err != nil {
-				log.Fatalf("Could not remove tmp file %s : %s", tmpDownloadFilePath, err)
+			if err := tmpFile.Close(); err != nil {
+				log.Fatalf("Could not close file: %s", err)
 			}
 
-			lib.FindReplaceText(files, name)
+			lib.FindReplaceText(files, map[string]interface{}{"Name": name})
 		},
 	}
 
