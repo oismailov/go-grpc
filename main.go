@@ -1,13 +1,14 @@
 package main
 
 import (
+	"log"
+
 	"github.com/abhiyerra/landingcrew-cli/cmd"
 	"google.golang.org/grpc"
-	"log"
 )
 
 const (
-	address = "localhost:6000"
+	address = "localhost:8001"
 )
 
 func main() {
