@@ -21,6 +21,7 @@ var (
 	codeWorkflowClient    pb.CodeWorkflowClient
 	contentWorkflowClient pb.ContentWorkflowClient
 	dataWorkflowClient    pb.DataWorkflowClient
+	appWorkflowClient     pb.AppWorkflowClient
 )
 
 // Execute adds all child commands to the root command and sets flags appropriately.
