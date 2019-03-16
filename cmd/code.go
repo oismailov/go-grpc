@@ -3,8 +3,8 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"github.com/abhiyerra/landingcrew-cli/lib"
-	pb "github.com/abhiyerra/landingcrew-cli/workflow"
+	"github.com/oismailov/go-grpc/lib"
+	pb "github.com/oismailov/go-grpc/workflow"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/spf13/cobra"
 	"io"
@@ -13,7 +13,7 @@ import (
 	"os"
 )
 
-const CODE_TEMPLATE_PATH = "https://assets.landingcrew.com/templates/%s.zip"
+const CODE_TEMPLATE_PATH = "https://assets.go-grpc.com/templates/%s.zip"
 
 func getCmdCode() *cobra.Command {
 	cmd := &cobra.Command{
@@ -113,7 +113,7 @@ func getCmdCodeInit() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			/*
 				Create tmp zip file `tmpDownloadFilePath`.
-				Download archive from `https://assets.landingcrew.com/templates/{CODE_TYPE}/.zip` to that file.
+				Download archive from `https://assets.go-grpc.com/templates/{CODE_TYPE}/.zip` to that file.
 				Unzip `tmpDownloadFilePath` to `path`
 				Replace  {{Name .}} with name for each file.
 			*/

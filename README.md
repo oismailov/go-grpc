@@ -1,6 +1,6 @@
-# LandingCrew CLI
+# go-grpc CLI
 
-LandingCrew CLI allows you to access a workforce from the command line.
+go-grpc CLI allows you to access a workforce from the command line.
 
 # Usage
 
@@ -16,11 +16,11 @@ code new-from-dir --code-type type --dir .
 
 ### Create New Code from Github Repo
 
-code new-from-repo --github-auth-token --github-repo abhiyerra/landingcrew --code-type type
+code new-from-repo --github-auth-token --github-repo oismailov/go-grpc --code-type type
 
     - Check for Readme
     - Check that there are Github Issues
-    - Add LandingCrewWorker as a contributor to the repo.
+    - Add go-grpcWorker as a contributor to the repo.
 
         Return: {"ID": id}
 

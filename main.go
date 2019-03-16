@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/abhiyerra/landingcrew-cli/cmd"
+	"github.com/oismailov/go-grpc/cmd"
 	"google.golang.org/grpc"
 )
 

@@ -28,16 +28,16 @@ func (a *Authentication) RequireTransportSecurity() bool {
 	return true
 }
 
-// Connect establishes a grpc authenticated TLS connection to the landingcrew API server.
+// Connect establishes a grpc authenticated TLS connection to the go-grpc API server.
 func Connect(target string) (*grpc.ClientConn, error) {
 	// Setup the login/pass
 	auth := Authentication{
-		Email:  os.Getenv("LANDINGCREW_EMAIL"),
-		APIKey: os.Getenv("LANDINGCREW_API_KEY"),
+		Email:  os.Getenv("go-grpc_EMAIL"),
+		APIKey: os.Getenv("go-grpc_API_KEY"),
 	}
 
 	// Create the client TLS credentials
-	creds, err := credentials.NewClientTLSFromFile("../../cert/server-cert.pem", "landingcrew")
+	creds, err := credentials.NewClientTLSFromFile("../../cert/server-cert.pem", "go-grpc")
 	if err != nil {
 		return nil, fmt.Errorf("could not load tls cert: %s", err)
 	}

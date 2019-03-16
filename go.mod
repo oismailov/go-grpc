@@ -1,4 +1,4 @@
-module github.com/abhiyerra/landingcrew-cli
+module github.com/oismailov/go-grpc
 
 require (
 	github.com/golang/protobuf v1.2.0

@@ -6,12 +6,12 @@ import (
 	"google.golang.org/grpc"
 	"os"
 
-	pb "github.com/abhiyerra/landingcrew-cli/workflow"
+	pb "github.com/oismailov/go-grpc/workflow"
 )
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "landingcrew",
+	Use:   "go-grpc",
 	Short: "Here will be short description",
 	Long:  "Here will be long description",
 }

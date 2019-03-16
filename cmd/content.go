@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/abhiyerra/landingcrew-cli/lib"
-	pb "github.com/abhiyerra/landingcrew-cli/workflow"
+	"github.com/oismailov/go-grpc/lib"
+	pb "github.com/oismailov/go-grpc/workflow"
 	"github.com/golang/protobuf/ptypes/empty"
 	"io"
 	"log"
